@@ -1,13 +1,21 @@
+using System.Threading.Tasks;
+using ECommerce.API.ExtensionMethods;
+using ECommerce.Domain.Contracts;
 using ECommerce.Persistence.Data.Contexts;
+using ECommerce.Persistence.Data.DataSeed;
+using ECommerce.Persistence.Repositories;
+using ECommerce.Services;
+using ECommerce.Services.Abstraction;
+using ECommerce.Services.MappingProfiles;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            #region DI Registeration
+            #region Register DI Container
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -22,10 +30,17 @@ namespace ECommerce.API
                     builder.Configuration.GetConnectionString("DefaultConnection")
                 );
             });
+            builder.Services.AddScoped<IDataInitializer, DataInitializer>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(X => X.AddProfile<ProductProfile>());
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             #endregion
 
             var app = builder.Build();
+
+            await app.MigrateDatabase();
+            await app.SeedData();
 
             #region Configure Middleware
             // Configure the HTTP request pipeline.
@@ -42,7 +57,7 @@ namespace ECommerce.API
             app.MapControllers();
             #endregion
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }
