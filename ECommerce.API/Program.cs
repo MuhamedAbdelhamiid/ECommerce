@@ -4,7 +4,6 @@ using ECommerce.Domain.Contracts;
 using ECommerce.Persistence.Data.Contexts;
 using ECommerce.Persistence.Data.DataSeed;
 using ECommerce.Persistence.Repositories;
-using ECommerce.Presentation.Controllers;
 using ECommerce.Services;
 using ECommerce.Services.Abstraction;
 using ECommerce.Services.MappingProfiles;
