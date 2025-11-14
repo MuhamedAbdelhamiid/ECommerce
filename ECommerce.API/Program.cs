@@ -32,8 +32,10 @@ namespace ECommerce.API
             });
             builder.Services.AddScoped<IDataInitializer, DataInitializer>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper(X => X.AddProfile<ProductProfile>());
+            builder.Services.AddAutoMapper(typeof(ProductProfile).Assembly);
             builder.Services.AddScoped<IProductService, ProductService>();
+
+            builder.Services.AddTransient<ProductPictureUrlResolver>();
 
             #endregion
 
@@ -52,6 +54,7 @@ namespace ECommerce.API
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
             app.UseAuthorization();
 
             app.MapControllers();
