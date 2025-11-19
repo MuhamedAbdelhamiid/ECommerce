@@ -41,6 +41,8 @@ namespace ECommerce.Services.Specifications.Product_Specifications
                     ApplyOrderBy(X => X.Id);
                     break;
             }
+
+            ApplyPagination(productQuery.pageIndex, productQuery.pageSize);
         }
 
         public ProductWithBrandAndTypeSpecifications(int id)
