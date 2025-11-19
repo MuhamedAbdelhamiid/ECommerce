@@ -37,6 +37,14 @@ namespace ECommerce.Persistence
                         (currentQuery, includeExp) => currentQuery.Include(includeExp)
                     );
                 }
+                if(specifications.OrderBy is not null)
+                {
+                    query = query.OrderBy(specifications.OrderBy);
+                }
+                if(specifications.OrderByDescending is not null)
+                {
+                    query = query.OrderByDescending(specifications.OrderByDescending);
+                }
             }
 
             return query;

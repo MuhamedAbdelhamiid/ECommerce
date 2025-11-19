@@ -17,13 +17,35 @@ namespace ECommerce.Services.Specifications
             Criteria = criteria;
         }
 
-        public ICollection<Expression<Func<TEntity, object>>> IncludeExpressions { get; } = [];
 
+        #region Filteration
         public Expression<Func<TEntity, bool>> Criteria { get; }
+
+        #endregion
+
+        #region Ordering
+        public Expression<Func<TEntity, object>> OrderBy { private set; get; }
+
+        public Expression<Func<TEntity, object>> OrderByDescending { private set; get; }
+
+        public void ApplyOrderBy(Expression<Func<TEntity, object>> orderByExp)
+        {
+            OrderBy = orderByExp;
+        }
+        public void ApplyOrderByDescending(Expression<Func<TEntity, object>> orderByDescExp)
+        {
+            OrderByDescending = orderByDescExp;
+        }
+
+        #endregion
+
+        #region Includes
+        public ICollection<Expression<Func<TEntity, object>>> IncludeExpressions { get; } = [];
 
         protected void AddInclude(Expression<Func<TEntity, object>> includeExpression)
         {
             IncludeExpressions.Add(includeExpression);
-        }
+        } 
+        #endregion
     }
 }
