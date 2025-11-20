@@ -6,8 +6,9 @@ using ECommerce.Persistence.Data.DataSeed;
 using ECommerce.Persistence.Repositories;
 using ECommerce.Services;
 using ECommerce.Services.Abstraction;
-using ECommerce.Services.MappingProfiles;
+using ECommerce.Services.MappingProfiles.Product_Profiles;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace ECommerce.API
 {
@@ -36,6 +37,15 @@ namespace ECommerce.API
             builder.Services.AddScoped<IProductService, ProductService>();
 
             builder.Services.AddTransient<ProductPictureUrlResolver>();
+            builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+            {
+                return ConnectionMultiplexer.Connect(
+                    builder.Configuration.GetConnectionString("RedisConnection")!
+                );
+            });
+
+            builder.Services.AddScoped<IBasketRepository, BasketRepositor>();
+            builder.Services.AddScoped<IBasketService, BasketService>();
 
             #endregion
 

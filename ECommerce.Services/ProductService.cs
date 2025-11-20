@@ -36,12 +36,14 @@ namespace ECommerce.Services
             ProductQueryParams productQuery
         )
         {
+            var productRepo = _unitOfWork.GetRepository<Product, int>();
+
             var spec = new ProductWithBrandAndTypeSpecifications(productQuery);
-            var products = await _unitOfWork.GetRepository<Product, int>().GetAllAsync(spec);
+            var products = await productRepo.GetAllAsync(spec);
             
 
             var countSpec = new ProductWithCountSpecifications(productQuery);
-            var countOfFilteredData = await _unitOfWork.GetRepository<Product, int>().CountAsync(countSpec);
+            var countOfFilteredData = await productRepo.CountAsync(countSpec);
 
 
             var dataToReturn = _mapper.Map<IEnumerable<ProductDTO>>(products);
