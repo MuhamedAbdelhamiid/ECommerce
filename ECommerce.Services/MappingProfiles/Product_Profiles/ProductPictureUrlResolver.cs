@@ -9,7 +9,7 @@ using ECommerce.Domain.Entities.ProductModule;
 using ECommerce.Shared.DTOs.ProductDTOs;
 using Microsoft.Extensions.Configuration;
 
-namespace ECommerce.Services.MappingProfiles
+namespace ECommerce.Services.MappingProfiles.Product_Profiles
 {
     public class ProductPictureUrlResolver : IValueResolver<Product, ProductDTO, string>
     {

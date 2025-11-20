@@ -7,7 +7,7 @@ using AutoMapper;
 using ECommerce.Domain.Entities.ProductModule;
 using ECommerce.Shared.DTOs.ProductDTOs;
 
-namespace ECommerce.Services.MappingProfiles
+namespace ECommerce.Services.MappingProfiles.Product_Profiles
 {
     public class ProductProfile : Profile
     {

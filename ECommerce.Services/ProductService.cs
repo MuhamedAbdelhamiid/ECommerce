@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -31,14 +32,25 @@ namespace ECommerce.Services
             return _mapper.Map<IEnumerable<BrandDTO>>(brands);
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetAllProductsAsync(
+        public async Task<PagintedResult<ProductDTO>> GetAllProductsAsync(
             ProductQueryParams productQuery
         )
         {
-            var spec = new ProductWithBrandAndTypeSpecifications(productQuery);
-            var products = await _unitOfWork.GetRepository<Product, int>().GetAllAsync(spec);
+            var productRepo = _unitOfWork.GetRepository<Product, int>();
 
-            return _mapper.Map<IEnumerable<ProductDTO>>(products);
+            var spec = new ProductWithBrandAndTypeSpecifications(productQuery);
+            var products = await productRepo.GetAllAsync(spec);
+            
+
+            var countSpec = new ProductWithCountSpecifications(productQuery);
+            var countOfFilteredData = await productRepo.CountAsync(countSpec);
+
+
+            var dataToReturn = _mapper.Map<IEnumerable<ProductDTO>>(products);
+            var countOfDataToReturn = dataToReturn.Count();
+
+
+            return new PagintedResult<ProductDTO>(productQuery.pageIndex, countOfDataToReturn, countOfFilteredData, dataToReturn);
         }
 
         public async Task<IEnumerable<TypeDTO>> GetAllTypesAsync()

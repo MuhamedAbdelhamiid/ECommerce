@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using ECommerce.Domain.Contracts;
 using ECommerce.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ECommerce.Persistence
 {
@@ -36,6 +35,19 @@ namespace ECommerce.Persistence
                         query,
                         (currentQuery, includeExp) => currentQuery.Include(includeExp)
                     );
+                }
+                if(specifications.OrderBy is not null)
+                {
+                    query = query.OrderBy(specifications.OrderBy);
+                }
+                if(specifications.OrderByDescending is not null)
+                {
+                    query = query.OrderByDescending(specifications.OrderByDescending);
+                }
+
+                if (specifications.IsPaginated)
+                {
+                    query = query.Skip(specifications.Skip).Take(specifications.Take);
                 }
             }
 

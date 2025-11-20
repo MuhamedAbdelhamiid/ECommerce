@@ -17,13 +17,51 @@ namespace ECommerce.Services.Specifications
             Criteria = criteria;
         }
 
+
+        #region Filteration
+        public Expression<Func<TEntity, bool>> Criteria { get; }
+
+        #endregion
+
+        #region Ordering
+        public Expression<Func<TEntity, object>> OrderBy { private set; get; }
+
+        public Expression<Func<TEntity, object>> OrderByDescending { private set; get; }
+
+        public void ApplyOrderBy(Expression<Func<TEntity, object>> orderByExp)
+        {
+            OrderBy = orderByExp;
+        }
+        public void ApplyOrderByDescending(Expression<Func<TEntity, object>> orderByDescExp)
+        {
+            OrderByDescending = orderByDescExp;
+        }
+
+        #endregion
+
+        #region Pagination
+        public int Skip { private set; get; }
+
+        public int Take { private set; get; }
+        public bool IsPaginated { private set; get; }
+
+        public void ApplyPagination(int pageIndex, int pageSize)
+        {
+            IsPaginated = true;
+            Skip = (pageIndex - 1) * pageSize;
+            Take = pageSize;
+        }
+        #endregion
+
+        #region Includes
         public ICollection<Expression<Func<TEntity, object>>> IncludeExpressions { get; } = [];
 
-        public Expression<Func<TEntity, bool>> Criteria { get; }
+
 
         protected void AddInclude(Expression<Func<TEntity, object>> includeExpression)
         {
             IncludeExpressions.Add(includeExpression);
-        }
+        } 
+        #endregion
     }
 }
